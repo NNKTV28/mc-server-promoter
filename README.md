@@ -335,7 +335,7 @@ node shell.js
 
 ```bash
 # 1) Clone and install on production server
-git clone <repository-url>
+git clone [<repository-url>](https://github.com/NNKTV28/Minecraft-Server-Promoter-.git)
 cd mc-server-promoter
 npm install --production
 
