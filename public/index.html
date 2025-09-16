@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alliance Server Promoter</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="container">
+    <div class="header-content">
+      <div class="header-main">
+        <h1>🌍 Alliance Server Promoter</h1>
+        <p>Submit your Alliance server and get discovered. <strong>Paid</strong> listings are featured above free ones.</p>
+      </div>
+      <div class="header-auth">
+        <div id="authButtons" class="auth-buttons">
+          <button id="loginBtn" class="btn-secondary">Login</button>
+          <button id="registerBtn" class="btn-secondary">Register</button>
+        </div>
+        <div id="userMenu" class="user-menu" style="display: none;">
+          <span id="username"></span>
+          <div class="dropdown">
+            <button class="dropdown-btn">▼</button>
+            <div class="dropdown-content">
+              <a href="#" id="profileBtn">Profile</a>
+              <a href="#" id="myServersBtn">My Servers</a>
+              <a href="#" id="dashboardBtn" style="display: none;">📊 Dashboard</a>
+              <a href="#" id="adminBtn" style="display: none;">Admin Panel</a>
+              <a href="#" id="logoutBtn">Logout</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Main view with server listing and submission -->
+    <div id="mainView" class="grid">
+      <section class="card" id="submitSection">
+        <h2>Submit a Server</h2>
+        <div id="submitFormAuth" style="display: none;">
+          <p class="muted">Please <a href="#" id="loginLink">login</a> or <a href="#" id="registerLink">register</a> to submit a server.</p>
+        </div>
+        <form id="serverForm">
+          <label>
+            Server Name
+            <input type="text" name="name" required placeholder="Alliance SMP" />
+          </label>
+          <label>
+            IP / Address
+            <input type="text" name="ip" required placeholder="play.example.com:25565" />
+          </label>
+          <label>
+            Website (optional)
+            <input type="url" name="website_url" placeholder="https://example.com" />
+          </label>
+          <label>
+            Banner Image (optional)
+            <div class="banner-upload-container">
+              <input type="url" name="banner_url" placeholder="https://... or drag & drop image file" class="banner-url-input" />
+              <div class="banner-drop-zone" id="bannerDropZone">
+                <div class="drop-zone-content">
+                  <span class="drop-zone-icon">📁</span>
+                  <span class="drop-zone-text">Drop image here or click to browse</span>
+                  <span class="drop-zone-subtext">JPEG, PNG, GIF, WebP • Max 5MB</span>
+                </div>
+                <input type="file" id="bannerFileInput" accept="image/*" style="display: none;" />
+              </div>
+              <div class="banner-preview" id="bannerPreview" style="display: none;">
+                <img id="bannerPreviewImage" alt="Banner preview" />
+                <button type="button" class="remove-banner" id="removeBanner">✕</button>
+              </div>
+            </div>
+          </label>
+          <label>
+            Description (optional)
+            <textarea name="description" rows="4" placeholder="Tell players what makes your server special..."></textarea>
+          </label>
+          <label id="planSection">
+            Plan
+            <select name="plan">
+              <option value="free">Free</option>
+              <option value="paid">Paid (Featured)</option>
+            </select>
+          </label>
+          <button type="submit">Create Listing</button>
+          <p id="formMsg" class="muted"></p>
+        </form>
+      </section>
+
+      <section class="card">
+        <div class="list-header">
+          <h2>Server Listings</h2>
+          <div class="controls">
+            <input id="search" type="search" placeholder="Search name, IP, description..." />
+            <select id="sort">
+              <option value="rank">Featured + Top</option>
+              <option value="votes">Votes</option>
+              <option value="new">Newest</option>
+            </select>
+          </div>
+        </div>
+        <div id="serverList" class="server-list"></div>
+      </section>
+    </div>
+
+    <!-- User profile view -->
+    <div id="profileView" class="view" style="display: none;">
+      <section class="card">
+        <div class="view-header">
+          <h2>User Profile</h2>
+          <button id="backToMain" class="btn-secondary">← Back to Main</button>
+        </div>
+        <form id="profileForm">
+          <label>
+            Username
+            <input type="text" id="profileUsername" disabled />
+          </label>
+          <label>
+            Email
+            <input type="email" id="profileEmail" required />
+          </label>
+          <button type="submit">Update Profile</button>
+        </form>
+        
+        <h3>Change Password</h3>
+        <form id="passwordForm">
+          <label>
+            Current Password
+            <input type="password" id="currentPassword" required />
+          </label>
+          <label>
+            New Password
+            <input type="password" id="newPassword" required />
+          </label>
+          <button type="submit">Change Password</button>
+        </form>
+        <p id="profileMsg" class="muted"></p>
+      </section>
+    </div>
+
+    <!-- User servers view -->
+    <div id="myServersView" class="view" style="display: none;">
+      <section class="card">
+        <div class="view-header">
+          <h2>My Servers</h2>
+          <button id="backToMainFromServers" class="btn-secondary">← Back to Main</button>
+        </div>
+        <div id="myServersList"></div>
+        <p id="myServersMsg" class="muted"></p>
+      </section>
+    </div>
+
+    <!-- Dashboard view -->
+    <div id="dashboardView" class="view" style="display: none;">
+      <section class="card">
+        <div class="view-header">
+          <h2>📊 System Dashboard</h2>
+          <button id="backToMainFromDashboard" class="btn-secondary">← Back to Main</button>
+        </div>
+        
+        <div id="dashboardContent">
+          <div class="loading-spinner" style="text-align: center; padding: 40px;">
+            🔄 Loading dashboard data...
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Admin panel view -->
+    <div id="adminView" class="view" style="display: none;">
+      <section class="card">
+        <div class="view-header">
+          <h2>Admin Panel</h2>
+          <button id="backToMainFromAdmin" class="btn-secondary">← Back to Main</button>
+        </div>
+        
+        <div class="admin-tabs">
+          <button class="tab-btn active" data-tab="stats">Dashboard</button>
+          <button class="tab-btn" data-tab="users">Users</button>
+          <button class="tab-btn" data-tab="servers">Servers</button>
+          <button class="tab-btn" data-tab="settings">Settings</button>
+        </div>
+        
+        <div id="adminStats" class="tab-content active">
+          <h3>Site Statistics</h3>
+          <div id="statsGrid" class="stats-grid"></div>
+        </div>
+        
+        <div id="adminUsers" class="tab-content">
+          <h3>User Management</h3>
+          <div id="usersList"></div>
+        </div>
+        
+        <div id="adminServers" class="tab-content">
+          <h3>Server Management</h3>
+          <div id="adminServersList"></div>
+        </div>
+        
+        <div id="adminSettings" class="tab-content">
+          <h3>Site Settings</h3>
+          <form id="settingsForm">
+            <label>
+              Site Title
+              <input type="text" name="siteTitle" placeholder="Alliance Server Promoter" />
+            </label>
+            <label>
+              Featured Plan Price
+              <input type="text" name="featuredPrice" placeholder="$5.99" />
+            </label>
+            <button type="submit">Save Settings</button>
+          </form>
+        </div>
+        
+        <p id="adminMsg" class="muted"></p>
+      </section>
+    </div>
+  </main>
+
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Login</h3>
+        <span class="close" data-modal="loginModal">&times;</span>
+      </div>
+      <form id="loginForm">
+        <label>
+          Username or Email
+          <input type="text" id="loginUsername" required />
+        </label>
+        <label>
+          Password
+          <input type="password" id="loginPassword" required />
+        </label>
+        <button type="submit">Login</button>
+        <p id="loginMsg" class="muted"></p>
+      </form>
+      <div class="modal-footer">
+        <p>Don't have an account? <a href="#" id="switchToRegister">Register here</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Register Modal -->
+  <div id="registerModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Register</h3>
+        <span class="close" data-modal="registerModal">&times;</span>
+      </div>
+      <form id="registerForm">
+        <label>
+          Username
+          <input type="text" id="registerUsername" required />
+        </label>
+        <label>
+          Email
+          <input type="email" id="registerEmail" required />
+        </label>
+        <label>
+          Password
+          <input type="password" id="registerPassword" required minlength="6" />
+        </label>
+        <button type="submit">Register</button>
+        <p id="registerMsg" class="muted"></p>
+      </form>
+      <div class="modal-footer">
+        <p>Already have an account? <a href="#" id="switchToLogin">Login here</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Server Modal -->
+  <div id="editServerModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Edit Server</h3>
+        <span class="close" data-modal="editServerModal">&times;</span>
+      </div>
+      <form id="editServerForm">
+        <input type="hidden" id="editServerId" />
+        <label>
+          Server Name
+          <input type="text" id="editServerName" required placeholder="Alliance SMP" />
+        </label>
+        <label>
+          IP / Address
+          <input type="text" id="editServerIp" required placeholder="play.example.com:25565" />
+        </label>
+        <label>
+          Website (optional)
+          <input type="url" id="editServerWebsite" placeholder="https://example.com" />
+        </label>
+        <label>
+          Banner Image (optional)
+          <div class="banner-upload-container">
+            <input type="url" id="editServerBanner" placeholder="https://... or drag & drop image file" class="banner-url-input" />
+            <div class="banner-drop-zone" id="editBannerDropZone">
+              <div class="drop-zone-content">
+                <span class="drop-zone-icon">📁</span>
+                <span class="drop-zone-text">Drop image here or click to browse</span>
+                <span class="drop-zone-subtext">JPEG, PNG, GIF, WebP • Max 5MB</span>
+              </div>
+              <input type="file" id="editBannerFileInput" accept="image/*" style="display: none;" />
+            </div>
+            <div class="banner-preview" id="editBannerPreview" style="display: none;">
+              <img id="editBannerPreviewImage" alt="Banner preview" />
+              <button type="button" class="remove-banner" id="editRemoveBanner">✕</button>
+            </div>
+          </div>
+        </label>
+        <label>
+          Description (optional)
+          <textarea id="editServerDescription" rows="4" placeholder="Tell players what makes your server special..."></textarea>
+        </label>
+        <button type="submit">Update Server</button>
+        <p id="editServerMsg" class="muted"></p>
+      </form>
+    </div>
+  </div>
+
+  <footer class="container">
+    <p class="muted">Tip: Voting is limited to once per day per server (per device). This demo does not process payments—admins can mark listings as paid to feature them.</p>
+  </footer>
+
+  <script src="/auth.js" type="module"></script>
+  <script src="/captcha.js" type="module"></script>
+  <script src="/banner-upload.js" type="module"></script>
+  <script src="/app.js" type="module"></script>
+</body>
+</html>
