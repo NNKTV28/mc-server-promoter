@@ -131,7 +131,7 @@ A comprehensive full-stack platform built with **Node.js + Express + SQLite3** t
 
 ```bash
 # 1) Clone the repository
-git clone <repository-url>
+git clone https://github.com/NNKTV28/Minecraft-Server-Promoter-.git
 cd mc-server-promoter
 
 # 2) Install all dependencies
