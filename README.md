@@ -407,7 +407,7 @@ pm2 save
 
 ## 🆘 Support & Documentation
 
-- 📧 **Email Support**: [support@yoursite.com]
+- 📧 **Email Support**: N/A
 - 📚 **Wiki**: Detailed documentation and tutorials
 - 🐛 **Issues**: Report bugs on GitHub
 - ❓ **FAQ**: Common questions and solutions
