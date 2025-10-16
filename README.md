@@ -1,3 +1,4 @@
+<img width="1024" height="1024" alt="mc_server_promoter_logo" src="https://github.com/user-attachments/assets/2e7b06ca-c6d8-49bc-902a-7c7524e8796d" />
 # Minecraft Server Promoter 🎮
 
 A comprehensive full-stack platform built with **Node.js + Express + SQLite3** to promote Minecraft servers with advanced features including **payment processing**, user management, and server analytics. Features both free listings and premium paid plans with enhanced visibility and exclusive benefits.
